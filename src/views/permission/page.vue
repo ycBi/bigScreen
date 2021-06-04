@@ -1,58 +1,92 @@
 <template>
-  <div class="app-container">
-    <div id="main" style="width: 600px;height:400px;"></div>
+  <div class="container">
+    <div>
+      <el-button @click="click" style="margin-left: 5px">全屏</el-button>
+    </div>
+    <div class="main">
+      <iframe
+        id="frame"
+        src="http://localhost:50401/analysis/dashboard/show/05cd39547179a1a1b489/" frameborder="no"
+        class="frameStyle"
+        name="frameName"
+        allowFullScreen
+        scrolling="yes"></iframe>
+    </div>
   </div>
 </template>
 
 <script>
-    import echarts from 'echarts';
+  import screenfull from 'screenfull'
 
-    export default {
-        name: 'PagePermission',
-        data() {
-            return{
-                myChart: null,
-            }
-        },
-        mounted(){
-            let chartDom = document.getElementById('main');
-            let myChart = echarts.init(chartDom);
-            myChart.setOption({
-                title: {
-                    text: '某站点用户访问来源',
-                    subtext: '纯属虚构',
-                    left: 'center'
-                },
-                tooltip: {
-                    trigger: 'item'
-                },
-                legend: {
-                    orient: 'vertical',
-                    left: 'left',
-                },
-                series: [
-                    {
-                        name: '访问来源',
-                        type: 'pie',
-                        radius: '50%',
-                        data: [
-                            {value: 1048, name: '搜索引擎'},
-                            {value: 735, name: '直接访问'},
-                            {value: 580, name: '邮件营销'},
-                            {value: 484, name: '联盟广告'},
-                            {value: 300, name: '视频广告'}
-                        ],
-                        emphasis: {
-                            itemStyle: {
-                                shadowBlur: 10,
-                                shadowOffsetX: 0,
-                                shadowColor: 'rgba(0, 0, 0, 0.5)'
-                            }
-                        }
-                    }
-                ]}
-            );
-        },
-        methods: {}
+  export default {
+    name: 'PagePermission',
+    data() {
+      return {
+        isFullscreen: false
+      }
+    },
+    mounted() {
+      console.log(this.$parent)
+      this.init()
+    },
+    methods: {
+      click() {
+        debugger
+        const element = document.getElementById('frame')
+        if (!screenfull.enabled) {
+          this.$message({
+            message: 'you browser can not work',
+            type: 'warning'
+          })
+          return false
+        }
+        screenfull.toggle(element)
+      },
+      change() {
+        this.isFullscreen = screenfull.isFullscreen
+      },
+      init() {
+        if (screenfull.enabled) {
+          screenfull.on('change', this.change)
+        }
+      },
+      destroy() {
+        if (screenfull.enabled) {
+          screenfull.off('change', this.change)
+        }
+      }
     }
+  }
 </script>
+
+<style lang="scss" scoped>
+  .container{
+    /*height: 100%;*/
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    .main{
+      /*flex: 1;*/
+      height: 100%;
+      overflow-y: auto;
+      .frameStyle{
+        height: 100%;
+        width: 100%;
+      }
+    }
+    /*.main{*/
+    /*  flex: 1;*/
+    /*  background-color: red;*/
+    /*  .frameStyle {*/
+    /*    height: 90px;*/
+    /*    width: 1680px;*/
+    /*    margin-top: 5px;*/
+    /*    margin-left: 5px;*/
+    /*    overflow: Scroll;*/
+    /*    overflow-y: hidden;*/
+    /*    overflow-x: hidden*/
+    /*  }*/
+    /*}*/
+  }
+
+</style>

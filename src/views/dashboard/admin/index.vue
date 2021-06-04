@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-editor-container">
-    <div id="chartTest" style="width: 600px;height:400px;">我是首页11111</div>
+    <div id="chartTest" style="width: 600px;height:400px;"></div>
   </div>
 </template>
 

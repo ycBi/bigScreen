@@ -15,7 +15,7 @@
         <el-input
           ref="username"
           v-model="loginForm.username"
-          placeholder="请输入用户名"
+          placeholder="用户名"
           name="username"
           type="text"
           tabindex="1"
@@ -33,7 +33,7 @@
             ref="password"
             v-model="loginForm.password"
             :type="passwordType"
-            placeholder="Password"
+            placeholder="密码"
             name="password"
             tabindex="2"
             autocomplete="on"
@@ -48,30 +48,8 @@
       </el-tooltip>
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
-
-<!--      <div style="margin-top: 20px">-->
-<!--        <div class="tips">-->
-<!--          <span>Username : admin</span>-->
-<!--          <span>Password : any</span>-->
-<!--        </div>-->
-<!--        <div class="tips">-->
-<!--          <span style="margin-right:18px;">Username : editor</span>-->
-<!--          <span>Password : any</span>-->
-<!--        </div>-->
-
-<!--        <el-button class="thirdparty-button" type="primary" @click="showDialog=true">-->
-<!--          其他登录-->
-<!--        </el-button>-->
-<!--      </div>-->
     </el-form>
 
-<!--    <el-dialog title="Or connect with" :visible.sync="showDialog">-->
-<!--      Can not be simulated on local, so please combine you own business simulation! ! !-->
-<!--      <br>-->
-<!--      <br>-->
-<!--      <br>-->
-<!--      <social-sign />-->
-<!--    </el-dialog>-->
     <div style="display: flex;justify-content: center;margin-top: 250px">
       <h5 style="color: #ffffff">Copyright@武汉盛帆电子有限公司</h5>
     </div>
@@ -102,8 +80,8 @@ export default {
     }
     return {
       loginForm: {
-        username: '',
-        password: ''
+        username: 'admin',
+        password: '11111111'
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
