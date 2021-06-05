@@ -1,12 +1,13 @@
 <script src="../../router/index.js"></script>
 <template>
-  <section class="app-main">
+  <div class="app-main">
     <transition name="fade-transform" mode="out-in">
       <keep-alive :include="cachedViews">
         <router-view :key="key" />
       </keep-alive>
+
     </transition>
-  </section>
+  </div>
 </template>
 
 <script>
@@ -32,5 +33,12 @@ export default {
   position: relative;
   display: flex;
   /*overflow: hidden;*/
+
+
+}
+::v-deep .dashboard-container{
+  width: 100%;
+  height: 100%;
+  /*border: 1px solid #000;*/
 }
 </style>

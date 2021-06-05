@@ -1,49 +1,30 @@
 <template>
   <div>
-    <svg-icon :icon-class="isFullscreen?'exit-fullscreen':'fullscreen'" @click="click" />
+    <svg-icon icon-class="fullscreen" @click="click" />
   </div>
 </template>
 
 <script>
-import screenfull from 'screenfull'
-
+import Bus from '@/api/bus.js'
 export default {
   name: 'Screenfull',
   data() {
     return {
-      isFullscreen: false
+      isFullscreen: false,
+      elValue: '全屏通知',
     }
   },
   mounted() {
-    this.init()
   },
   beforeDestroy() {
-    this.destroy()
   },
   methods: {
     click() {
-      if (!screenfull.enabled) {
-        this.$message({
-          message: 'you browser can not work',
-          type: 'warning'
-        })
-        return false
-      }
-      screenfull.toggle()
+      Bus.$emit('page',this.elValue)
+      // Bus.$emit('dashboard', this.elValue)
+      Bus.$emit('role',this.elValue)
+      Bus.$emit('directive',this.elValue)
     },
-    change() {
-      this.isFullscreen = screenfull.isFullscreen
-    },
-    init() {
-      if (screenfull.enabled) {
-        screenfull.on('change', this.change)
-      }
-    },
-    destroy() {
-      if (screenfull.enabled) {
-        screenfull.off('change', this.change)
-      }
-    }
   }
 }
 </script>

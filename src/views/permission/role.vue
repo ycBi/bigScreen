@@ -1,8 +1,5 @@
 <template>
   <div class="container">
-    <div>
-      <el-button @click="click" style="margin-left: 5px">全屏</el-button>
-    </div>
     <div class="main">
       <iframe
         id="frame"
@@ -16,63 +13,76 @@
 </template>
 
 <script>
+  import screenfull from 'screenfull'
+  import Bus from '@/api/bus'
 
+  export default {
+    data() {
+      return {
+        isFullscreen: false
+      }
+    },
 
-    import echarts from 'echarts'
+    created() {
 
-    export default {
-        data() {
-            return {
-                myChart: null,
-            }
-        },
-
-        created() {
-
-        },
-        mounted() {
-          this.init()
-        },
-        methods: {
-            init() {
-                this.myChart = echarts.init(document.getElementById("chartTest"));
-                console.log(this.myChart)
-                // console.log(option)
-                this.myChart.setOption({
-                    title: {
-                        text: 'ECharts 入门示例'
-                    },
-                    tooltip: {},
-                    xAxis: {
-                        data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
-                    },
-                    yAxis: {},
-                    series: [{
-                        name: '销量',
-                        type: 'bar',
-                        data: [5, 20, 36, 10, 10, 20]
-                    }]
-                });
-            }
+    },
+    mounted() {
+      this.init()
+      // 用$on监听事件并接受数据
+      Bus.$on('role', (data) => {
+        console.log('receive' + data)
+        setTimeout(this.click(), 1000)
+      })
+    },
+    methods: {
+      click() {
+        const element = document.getElementById('frame')
+        console.log('111111' + element)
+        if (!screenfull.enabled) {
+          this.$message({
+            message: 'you browser can not work',
+            type: 'warning'
+          })
+          return false
         }
+        console.log('打印前' + element)
+        screenfull.toggle(element)
+      },
+      change() {
+        this.isFullscreen = screenfull.isFullscreen
+      },
+      init() {
+        if (screenfull.enabled) {
+          screenfull.on('change', this.change)
+        }
+      },
+      destroy() {
+        if (screenfull.enabled) {
+          screenfull.off('change', this.change)
+        }
+      }
     }
+  }
 </script>
 
 <style lang="scss" scoped>
-  .container{
+  .container {
     /*height: 100%;*/
     flex: 1;
     display: flex;
     flex-direction: column;
-    .main{
+
+    .main {
       /*flex: 1;*/
       height: 100%;
       overflow-y: auto;
-      .frameStyle{
+
+      .frameStyle {
         height: 100%;
         width: 100%;
       }
     }
+
     /*.main{*/
     /*  flex: 1;*/
     /*  background-color: red;*/

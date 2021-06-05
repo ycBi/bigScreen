@@ -26,7 +26,7 @@
                 this.flag = !this.flag
                 console.log(this.visitedViews)
                 console.log(this.visitedViews.length)
-                this.goToNewPage(0, this.visitedViews)
+                this.goToNewPage(1, this.visitedViews)
 
             },
 
@@ -39,7 +39,7 @@
                             this.goToNewPage(index, routes)
                         }, 3000)
                     else
-                        this.goToNewPage(0, routes)
+                        this.goToNewPage(1, routes)
                 }
             }
         }

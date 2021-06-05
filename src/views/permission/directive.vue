@@ -1,8 +1,5 @@
 <template>
   <div class="container">
-    <div>
-      <el-button @click="click" style="margin-left: 5px">全屏</el-button>
-    </div>
     <div class="main">
       <iframe
         id="frame"
@@ -17,6 +14,7 @@
 
 <script>
   import screenfull from 'screenfull'
+  import Bus from '@/api/bus'
 
   export default {
     name: 'DirectivePermission',
@@ -28,10 +26,14 @@
     mounted() {
       console.log(this.$parent)
       this.init()
+      // 用$on监听事件并接受数据
+      Bus.$on('directive', (data) => {
+        console.log("receive"+data)
+        setTimeout(this.click(),1000)
+      })
     },
     methods: {
       click() {
-        debugger
         const element = document.getElementById('frame')
         if (!screenfull.enabled) {
           this.$message({
