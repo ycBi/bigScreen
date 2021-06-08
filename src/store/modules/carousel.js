@@ -4,20 +4,20 @@ const state = {
 }
 
 const mutations = {
-  CHANGE_SCREEN_STATUS: (state)=>{
-    state.isFull = !state.isFull
+  CHANGE_SCREEN_STATUS: (state,val)=>{
+    state.isFull = val
   },
-  CHANGE_SWIPPER_STATUS: (state)=>{
-    state.isSwipper = !state.isSwipper
+  CHANGE_SWIPPER_STATUS: (state,val)=>{
+    state.isSwipper = val
   }
 }
 
 const actions = {
-  changeScreenStatus({commit}){
-    commit('CHANGE_SCREEN_STATUS')
+  changeScreenStatus({commit},val){
+    commit('CHANGE_SCREEN_STATUS',val)
   },
-  changeSwipperStatus({commit}){
-    commit('CHANGE_SWIPPER_STATUS')
+  changeSwipperStatus({commit},val){
+    commit('CHANGE_SWIPPER_STATUS',val)
   }
 }
 

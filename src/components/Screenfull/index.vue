@@ -20,10 +20,12 @@ export default {
   },
   methods: {
     click() {
-      Bus.$emit('page',this.elValue)
+      // Bus.$emit('page',this.elValue)
       // Bus.$emit('dashboard', this.elValue)
-      Bus.$emit('role',this.elValue)
-      Bus.$emit('directive',this.elValue)
+      // Bus.$emit('role',this.elValue)
+      // Bus.$emit('directive',this.elValue)
+      // Bus.$emit('full',this.elValue)
+      this.$store.dispatch('carousel/changeScreenStatus',true)
     },
   }
 }
