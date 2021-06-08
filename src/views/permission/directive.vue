@@ -1,8 +1,5 @@
 <template>
   <div class="container">
-    <div>
-      <el-button @click="click" style="margin-left: 5px">全屏</el-button>
-    </div>
     <div class="main">
       <iframe
         id="frame"
@@ -17,6 +14,7 @@
 
 <script>
   import screenfull from 'screenfull'
+  import Bus from '@/api/bus'
 
   export default {
     name: 'DirectivePermission',
@@ -25,13 +23,39 @@
         isFullscreen: false
       }
     },
+    created(){
+
+    },
+    computed:{
+      // isFullscreen() {
+      //   return this.$store.state.carousel.isFull
+      // },
+      isSwipper() {
+        return this.$store.state.carousel.isSwipper
+      }
+    },
     mounted() {
-      console.log(this.$parent)
+      console.log('directive swipper status '+this.isSwipper)
       this.init()
+      if (this.isSwipper){
+        this.click()
+        // this.click("isswipper role  "+data)
+      }
+      // 用$on监听事件并接受数据
+      Bus.$on('directive', (data) => {
+        console.log("receive"+data)
+       this.click()
+      })
+
+        // .$on('isSwipper',(data)=>{
+        //   console.log("isswipper  directive "+data)
+        // this.isSwipper = data
+        // console.log(" directive swipper status 42 "+this.isSwipper)
+        //   this.click()
+        // })
     },
     methods: {
       click() {
-        debugger
         const element = document.getElementById('frame')
         if (!screenfull.enabled) {
           this.$message({

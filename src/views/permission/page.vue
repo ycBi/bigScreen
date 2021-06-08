@@ -1,8 +1,5 @@
 <template>
   <div class="container">
-    <div>
-      <el-button @click="click" style="margin-left: 5px">全屏</el-button>
-    </div>
     <div class="main">
       <iframe
         id="frame"
@@ -17,6 +14,7 @@
 
 <script>
   import screenfull from 'screenfull'
+  import Bus from '@/api/bus'
 
   export default {
     name: 'PagePermission',
@@ -25,14 +23,43 @@
         isFullscreen: false
       }
     },
+    computed:{
+      // isFullscreen() {
+      //   return this.$store.state.carousel.isFull
+      // },
+      isSwipper() {
+        return this.$store.state.carousel.isSwipper
+      }
+    },
     mounted() {
-      console.log(this.$parent)
       this.init()
+      console.log("page swipper status "+this.isSwipper)
+      if (this.isSwipper){
+        this.click()
+        // this.click("isswipper role  "+data)
+      }
+      // 用$on监听事件并接受数据
+      Bus.$on('page', (data) => {
+        console.log("receive"+data)
+        // setTimeout(this.click(),1000)
+        this.click()
+      })
+
+        // .$on('isSwipper',(data)=>{
+        //   console.log("isswipper  page "+data)
+        // this.isSwipper = data
+        // console.log(" page swipper status "+this.isSwipper)
+        //   this.click()
+        // })
+    },
+    created(){
+    },
+    updated(){
     },
     methods: {
       click() {
-        debugger
         const element = document.getElementById('frame')
+        console.log("111111"+element)
         if (!screenfull.enabled) {
           this.$message({
             message: 'you browser can not work',
@@ -40,6 +67,7 @@
           })
           return false
         }
+        console.log("打印前"+element)
         screenfull.toggle(element)
       },
       change() {
