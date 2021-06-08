@@ -20,6 +20,15 @@
     data() {
       return {
         isFullscreen: false
+        // isSwipper: false
+      }
+    },
+    computed:{
+      // isFullscreen() {
+      //   return this.$store.state.carousel.isFull
+      // },
+      isSwipper() {
+        return this.$store.state.carousel.isSwipper
       }
     },
 
@@ -27,12 +36,35 @@
 
     },
     mounted() {
+      console.log('init before'+this.isFullscreen)
+      console.log('swipper status '+ this.isSwipper)
       this.init()
+      // if (this.isSwipper){
+      //   this.click()
+      //   // this.click("isswipper role  "+data)
+      // }
+      // console.log('full screen statsus '+this.isFullscreen)
       // 用$on监听事件并接受数据
       Bus.$on('role', (data) => {
         console.log('receive' + data)
-        setTimeout(this.click(), 1000)
+        // setTimeout(this.click(), 1000)
+        this.click()
       })
+      // }).$on('isSwipper',(data)=>{
+      //   console.log("isswipper role  "+data)
+      //   this.isSwipper = data
+      //   console.log(" role swipper status 42 "+this.isSwipper)
+      //   this.click()
+      // })
+      // console.log("2222"+this.isFullscreen)
+      //   Bus.$on('isSwipper',(data)=>{
+      //     console.log("isswipper role  "+data)
+      //     this.isSwipper = data
+      //   })
+      // console.log(" role swipper status "+this.isSwipper)
+      // if (this.isSwipper&&this.isFullscreen)
+      //   this.click()
+
     },
     methods: {
       click() {

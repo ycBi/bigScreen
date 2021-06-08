@@ -23,13 +23,34 @@
         isFullscreen: false
       }
     },
+    computed:{
+      // isFullscreen() {
+      //   return this.$store.state.carousel.isFull
+      // },
+      isSwipper() {
+        return this.$store.state.carousel.isSwipper
+      }
+    },
     mounted() {
       this.init()
+      console.log("page swipper status "+this.isSwipper)
+      if (this.isSwipper){
+        this.click()
+        // this.click("isswipper role  "+data)
+      }
       // 用$on监听事件并接受数据
       Bus.$on('page', (data) => {
         console.log("receive"+data)
-        setTimeout(this.click(),1000)
+        // setTimeout(this.click(),1000)
+        this.click()
       })
+
+        // .$on('isSwipper',(data)=>{
+        //   console.log("isswipper  page "+data)
+        // this.isSwipper = data
+        // console.log(" page swipper status "+this.isSwipper)
+        //   this.click()
+        // })
     },
     created(){
     },

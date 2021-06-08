@@ -1,10 +1,11 @@
 <template>
   <div>
-    <svg-icon class-name="swiper-icon" icon-class="swiper" @click="click"/>
+    <svg-icon class-name="swiper-icon" :icon-class="flag?'swiper':'pause'" @click="click"/>
   </div>
 </template>
 
 <script>
+    import Bus from '@/api/bus.js'
     export default {
         name: "HeaderSwiper",
 
@@ -24,10 +25,12 @@
         methods: {
             click() {
                 this.flag = !this.flag
+                console.log('headswipper: '+this.flag)
+                this.$store.dispatch('carousel/changeSwipperStatus')
+                // Bus.$emit('isSwipper',this.flag)
                 console.log(this.visitedViews)
                 console.log(this.visitedViews.length)
                 this.goToNewPage(1, this.visitedViews)
-
             },
 
             goToNewPage(index, routes) {
@@ -37,7 +40,7 @@
                             this.$router.replace({name: routes[index].name})
                             index++
                             this.goToNewPage(index, routes)
-                        }, 3000)
+                        }, 1500)
                     else
                         this.goToNewPage(1, routes)
                 }
