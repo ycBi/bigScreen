@@ -2,7 +2,7 @@
   <div class="container">
     <div class="main">
       <iframe
-        id="frame"
+        id="role"
         src="http://localhost:50401/analysis/dashboard/show/05cd39547179a1a1b489/" frameborder="no"
         class="frameStyle"
         name="frameName"
@@ -37,10 +37,6 @@
     mounted() {
       console.log('directive swipper status '+this.isSwipper)
       this.init()
-      if (this.isSwipper){
-        this.click()
-        // this.click("isswipper role  "+data)
-      }
       // 用$on监听事件并接受数据
       Bus.$on('directive', (data) => {
         console.log("receive"+data)
@@ -56,7 +52,7 @@
     },
     methods: {
       click() {
-        const element = document.getElementById('frame')
+        const element = document.getElementById('role')
         if (!screenfull.enabled) {
           this.$message({
             message: 'you browser can not work',

@@ -2,8 +2,8 @@
   <div class="container">
     <div class="main">
       <iframe
-        id="frame"
-        src="http://localhost:50401/analysis/dashboard/show/03590db461799c1f107b/" frameborder="no"
+        id="role"
+        :src=src frameborder="no"
         class="frameStyle"
         name="frameName"
         allowFullScreen
@@ -19,7 +19,8 @@
   export default {
     data() {
       return {
-        isFullscreen: false
+        isFullscreen: false,
+        src:''
         // isSwipper: false
       }
     },
@@ -31,20 +32,31 @@
         return this.$store.state.carousel.isSwipper
       }
     },
-
+    watch: {
+      $route: {
+        handler: function(route) {
+          console.log('route   ')
+          console.log(route)
+        },
+        immediate: true
+      }
+    },
     created() {
-
+      console.log('role 36 '+this.isFullscreen)
     },
     mounted() {
-      console.log('init before'+this.isFullscreen)
-      console.log('swipper status '+ this.isSwipper)
+      console.log('print route')
+      // console.log(this.$route.meta.src)
+      this.src = this.$route.meta.src
+      // console.log('init before'+this.isFullscreen)
+      // console.log('swipper status '+ this.isSwipper)
       this.init()
       // if (this.isSwipper){
       //   this.click()
       //   // this.click("isswipper role  "+data)
       // }
       // console.log('full screen statsus '+this.isFullscreen)
-      // 用$on监听事件并接受数据
+      // 用$on监听全屏事件并接受数据
       Bus.$on('role', (data) => {
         console.log('receive' + data)
         // setTimeout(this.click(), 1000)
@@ -68,7 +80,7 @@
     },
     methods: {
       click() {
-        const element = document.getElementById('frame')
+        const element = document.getElementById('role')
         console.log('111111' + element)
         if (!screenfull.enabled) {
           this.$message({

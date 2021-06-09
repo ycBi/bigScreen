@@ -1,6 +1,7 @@
 <template>
   <div>
-    <svg-icon class-name="swiper-icon" :icon-class="flag?'swiper':'pause'" @click="click"/>
+<!--    <svg-icon class-name="swiper-icon" :icon-class="flag?'swiper':'pause'" @click="click"/>-->
+    <svg-icon class-name="swiper-icon" icon-class="swiper" @click="click"/>
   </div>
 </template>
 
@@ -25,12 +26,12 @@
         methods: {
             click() {
                 this.flag = !this.flag
-                console.log('headswipper: '+this.flag)
+                console.log('head swipper: '+this.flag)
                 this.$store.dispatch('carousel/changeSwipperStatus')
-                // Bus.$emit('isSwipper',this.flag)
+                // Bus.$emit('startSwipper',this.flag)
                 console.log(this.visitedViews)
                 console.log(this.visitedViews.length)
-                this.goToNewPage(1, this.visitedViews)
+                // this.goToNewPage(1, this.visitedViews)
             },
 
             goToNewPage(index, routes) {

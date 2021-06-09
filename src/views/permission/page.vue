@@ -2,7 +2,7 @@
   <div class="container">
     <div class="main">
       <iframe
-        id="frame"
+        id="role"
         src="http://localhost:50401/analysis/dashboard/show/05cd39547179a1a1b489/" frameborder="no"
         class="frameStyle"
         name="frameName"
@@ -31,13 +31,18 @@
         return this.$store.state.carousel.isSwipper
       }
     },
+    watch: {
+      $route: {
+        handler: function(route) {
+          console.log('route   ')
+          console.log(route)
+        },
+        immediate: true
+      }
+    },
     mounted() {
       this.init()
       console.log("page swipper status "+this.isSwipper)
-      if (this.isSwipper){
-        this.click()
-        // this.click("isswipper role  "+data)
-      }
       // 用$on监听事件并接受数据
       Bus.$on('page', (data) => {
         console.log("receive"+data)
@@ -58,7 +63,7 @@
     },
     methods: {
       click() {
-        const element = document.getElementById('frame')
+        const element = document.getElementById('role')
         console.log("111111"+element)
         if (!screenfull.enabled) {
           this.$message({

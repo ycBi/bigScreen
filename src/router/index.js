@@ -136,6 +136,17 @@ export const asyncRoutes = [
         name: 'RolePermission',
         meta: {
           title: '三号大厅展示',
+          src: 'http://localhost:50401/analysis/dashboard/show/09d756e23179a12580fb/',
+          roles: ['admin']
+        }
+      }
+      , {
+        path: 'firstHall',
+        component: () => import('@/views/permission/role'),
+        name: 'carousel',
+        meta: {
+          src: 'http://localhost:50401/analysis/dashboard/show/03590db461799c1f107b/',
+          title: 'carousel',
           roles: ['admin']
         }
       }

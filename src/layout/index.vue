@@ -3,14 +3,17 @@
     <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside"/>
     <sidebar class="sidebar-container"/>
     <div :class="{hasTagsView:needTagsView}" class="main-container">
-<!--      <navbar/>-->
+      <navbar/>
+      <tagsView/>
       <app-main/>
+      <Carousel/>
     </div>
   </div>
 </template>
 
 <script>
   import RightPanel from '@/components/RightPanel'
+  import Carousel from '@/components/Carousel'
   import { AppMain, Navbar, Settings, Sidebar, TagsView } from './components'
   import ResizeMixin from './mixin/ResizeHandler'
   import { mapState } from 'vuex'
@@ -23,7 +26,8 @@
       RightPanel,
       Settings,
       Sidebar,
-      TagsView
+      TagsView,
+      Carousel
     },
     mixins: [ResizeMixin],
     computed: {
