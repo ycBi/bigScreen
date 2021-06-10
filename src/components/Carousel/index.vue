@@ -1,7 +1,8 @@
 <template>
   <!--  这里使用v-show把iframe位置占着，因为使用v-if会出现拿到iframe这个对象为null(按道理说在mounted中应该dom已经渲染完成，但是我还是拿不到)-->
   <div class="container" v-show="flag">
-    <div class="main">
+    <div id="byc" class="main">
+      <div style="background-color: #2ac06d">123</div>
       <iframe
         id="frame"
         :src="src" frameborder="no"
@@ -26,10 +27,14 @@
         isFullscreen: false,
         src: 'http://localhost:50401/analysis/dashboard/show/03590db461799c1f107b/',
         // isSwipper: false,
-        srcList: ['http://localhost:50401/analysis/dashboard/show/03590db461799c1f107b/', 'http://localhost:50401/analysis/dashboard/show/09d756e23179a12580fb/', 'http://localhost:50401/analysis/dashboard/show/05cd39547179a1a1b489/']
+        srcList: [],
+        // srcList: ['http://localhost:50401/analysis/dashboard/show/03590db461799c1f107b/', 'http://localhost:50401/analysis/dashboard/show/09d756e23179a12580fb/', 'http://localhost:50401/analysis/dashboard/show/05cd39547179a1a1b489/']
       }
     },
     computed: {
+      visitedViews() {
+        return this.$store.state.tagsView.visitedViews
+      },
       // isFullscreen() {
       //   return this.$store.state.carousel.isFull
       // },
@@ -39,6 +44,9 @@
         },
         set() {
         }
+      },
+      carouselTime() {
+        return this.$store.state.carousel.carouselTime
       }
     },
     watch: {
@@ -50,11 +58,21 @@
         if (newValue) {
           this.flag = true
           this.click()
+          console.log('carousel time '+this.carouselTime)
           this.goToNewPage(0, this.srcList)
         } else {
           this.flag = false
         }
-
+      },
+      visitedViews(newValue,oldValue){
+        //监控到到点击了新的路由，visited列表中添加新的值，重新从visitedViews中获取srcList
+        this.srcList.length = 0
+        console.log(this.visitedViews)
+        this.visitedViews.forEach((value,index,arr)=>{
+          console.log(value)
+          if (value.meta.hasOwnProperty('src'))  this.srcList.push(value.meta.src)
+        })
+        console.log(this.srcList)
       }
     },
     created() {
@@ -109,7 +127,7 @@
     methods: {
       click() {
         // this.$nextTick(()=>{const element = document.getElementById('frame')})
-        const element = document.getElementById('frame')
+        const element = document.getElementById('byc')
         console.log('==============================================' + element)
         if (!screenfull.enabled) {
           this.$message({
@@ -144,7 +162,7 @@
               console.log(this.src)
               index++
               this.goToNewPage(index, urlList)
-            }, 1500)
+            }, this.carouselTime)
           } else {
             this.goToNewPage(0, urlList)
           }
@@ -155,6 +173,7 @@
           this.isFullscreen = false
           console.log('监听到了退出了全屏事件~~~~~~~~~~~~~~~~~~')
           this.flag = false
+          this.$store.dispatch('carousel/changeSwipperStatus')
         }
       },
       //全屏判断状态 取消
