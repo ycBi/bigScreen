@@ -1,13 +1,10 @@
 <template>
   <div>
-    <!--    <svg-icon class-name="swiper-icon" :icon-class="flag?'swiper':'pause'" @click="click"/>-->
-    <!--    <svg-icon class-name="swiper-icon" icon-class="swiper" @click="click"/>-->
     <svg-icon class-name="swiper-icon" icon-class="swiper" @click="dialogVisible = true"/>
     <el-dialog
       title=""
       :visible.sync="dialogVisible"
       width="30%"
-      @close="click"
       :before-close="handleClose">
       <span style="font-size: 20px">时间单位为：ms</span>
       <el-input
@@ -20,7 +17,7 @@
       />
       <span slot="footer" class="dialog-footer">
     <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+    <el-button type="primary" @click="enterFullScreen">确 定</el-button>
   </span>
     </el-dialog>
   </div>
@@ -42,7 +39,6 @@
     },
     data() {
       return {
-        flag: false,
         dialogVisible: false,
         carouselTime: 1000
       }
@@ -55,29 +51,12 @@
           })
           .catch(_ => {});
       },
-      click() {
-        this.flag = !this.flag
-        console.log('head swipper: ' + this.flag)
+      enterFullScreen() {
+        this.dialogVisible = false
         this.$store.dispatch('carousel/changeSwipperStatus')
         this.$store.dispatch('carousel/changeCarouselTime',this.carouselTime)
-        // Bus.$emit('startSwipper',this.flag)
         console.log(this.visitedViews)
         console.log(this.visitedViews.length)
-        // this.goToNewPage(1, this.visitedViews)
-      },
-
-      goToNewPage(index, routes) {
-        if (this.flag) {
-          if (index < routes.length) {
-            setTimeout(() => {
-              this.$router.replace({ name: routes[index].name })
-              index++
-              this.goToNewPage(index, routes)
-            }, 1500)
-          } else {
-            this.goToNewPage(1, routes)
-          }
-        }
       }
     }
   }

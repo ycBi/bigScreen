@@ -1,33 +1,44 @@
 <template>
   <!--  这里使用v-show把iframe位置占着，因为使用v-if会出现拿到iframe这个对象为null(按道理说在mounted中应该dom已经渲染完成，但是我还是拿不到)-->
-  <div class="container" v-show="flag">
+  <div v-show="flag" class="container">
     <div id="byc" class="main">
-      <div style="background-color: #2ac06d">123</div>
+      <!--      <div class="box1" @mouseenter="showOption" @mouseleave="hiddenOption">-->
+      <div class="box1">
+        <div class="box2">
+          <i class="el-icon-caret-left" style="font-size:30px;margin-right: 40px" @click="previousPage"></i>
+          <i :class='pauseFlag?"el-icon-video-pause":"el-icon-video-play"' style="font-size:30px"
+             @click="changePauseStatus"></i>
+          <i class="el-icon-caret-right" style="font-size:30px;margin-left: 40px" @click="nextPage"></i>
+        </div>
+      </div>
       <iframe
         id="frame"
-        :src="src" frameborder="no"
+        :src="src"
+        frameborder="no"
         class="frameStyle"
         name="frameName"
         allowFullScreen
-        scrolling="yes"></iframe>
+        scrolling="yes"
+      />
     </div>
   </div>
 </template>
 
 <script>
   import screenfull from 'screenfull'
-  //只有活着的vue实例才可以通讯监听
+  // 只有活着的vue实例才可以通讯监听
   import Bus from '@/api/bus'
 
   export default {
-    name: 'carousel',
+    name: 'Carousel',
     data() {
       return {
-        flag: false,//用于该组件的iframe是否显示
+        pauseFlag: false,
+        flag: false, // 用于该组件的iframe是否显示
         isFullscreen: false,
-        src: 'http://localhost:50401/analysis/dashboard/show/03590db461799c1f107b/',
+        src:'',
         // isSwipper: false,
-        srcList: [],
+        srcList: []
         // srcList: ['http://localhost:50401/analysis/dashboard/show/03590db461799c1f107b/', 'http://localhost:50401/analysis/dashboard/show/09d756e23179a12580fb/', 'http://localhost:50401/analysis/dashboard/show/05cd39547179a1a1b489/']
       }
     },
@@ -58,26 +69,49 @@
         if (newValue) {
           this.flag = true
           this.click()
-          console.log('carousel time '+this.carouselTime)
-          this.goToNewPage(0, this.srcList)
+          console.log('carousel time ' + this.carouselTime)
+          if (this.$route.meta.hasOwnProperty('src')) {
+            this.src = this.$route.meta.src
+          }
+          let index = this.srcList.map(item => item).indexOf(this.src)
+          this.goToNewPage(index, this.srcList)
         } else {
           this.flag = false
         }
       },
-      visitedViews(newValue,oldValue){
-        //监控到到点击了新的路由，visited列表中添加新的值，重新从visitedViews中获取srcList
+      visitedViews(newValue, oldValue) {
+        // 监控到到点击了新的路由，visited列表中添加新的值，重新从visitedViews中获取srcList
         this.srcList.length = 0
         console.log(this.visitedViews)
-        this.visitedViews.forEach((value,index,arr)=>{
+        this.visitedViews.forEach((value, index, arr) => {
           console.log(value)
-          if (value.meta.hasOwnProperty('src'))  this.srcList.push(value.meta.src)
+          if (value.meta.hasOwnProperty('src')) this.srcList.push(value.meta.src)
         })
         console.log(this.srcList)
       }
     },
     created() {
+      // window.addEventListener('click', function(e) {
+      //   //mousemove 只要鼠标一移动，就会触发事件
+      //   //获取鼠标最新的坐标
+      //   console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+      //   console.log(e.pageY)
+      //   console.log(e.pageX)
+      //   console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+      // })
+      // window.addEventListener('click', function(e) {
+      //   //mousemove 只要鼠标一移动，就会触发事件
+      //   //获取鼠标最新的坐标
+      //   console.log('============================================================')
+      //   console.log(e.pageY)
+      //   console.log(e.pageX)
+      //   console.log('============================================================')
+      // })
     },
     mounted() {
+      if (this.$route.meta.hasOwnProperty('src')) {
+        this.src = this.$route.meta.src
+      }
       document.addEventListener('fullscreenchange', this.fullScreenEsc)
       // console.log('init before'+this.isFullscreen)
       // console.log('swipper status '+ this.isSwipper)
@@ -119,7 +153,6 @@
       // console.log(" role swipper status "+this.isSwipper)
       // if (this.isSwipper&&this.isFullscreen)
       //   this.click()
-
     },
     beforeDestroy() {
       document.removeEventListener('fullscreenchange', this.fullScreenEsc)
@@ -154,7 +187,7 @@
       },
       goToNewPage(index, urlList) {
         console.log('isswipper ' + this.isSwipper)
-        if (this.flag) {
+        if (this.flag && this.pauseFlag === false) {
           console.log('跳转URL界面')
           if (index < urlList.length) {
             setTimeout(() => {
@@ -176,14 +209,14 @@
           this.$store.dispatch('carousel/changeSwipperStatus')
         }
       },
-      //全屏判断状态 取消
+      // 全屏判断状态 取消
       checkFull() {
-        //判断浏览器是否处于全屏状态 （需要考虑兼容问题）
-        //火狐浏览器
+        // 判断浏览器是否处于全屏状态 （需要考虑兼容问题）
+        // 火狐浏览器
         let isFull =
           document.mozFullScreen ||
           document.fullScreen ||
-          //谷歌浏览器及Webkit内核浏览器
+          // 谷歌浏览器及Webkit内核浏览器
           document.webkitIsFullScreen ||
           document.webkitRequestFullScreen ||
           document.mozRequestFullScreen ||
@@ -192,8 +225,8 @@
           isFull = false
         }
         return isFull
-      }
-      /*这个方法无法使用，因为浏览器故意不让全屏下监听ESC键的，跟网页加载时不能用程序使浏览器全屏一样的道理（可以使用screnfull插件让某个dom全屏），避免开发者恶意全屏*/
+      },
+      /* 这个方法无法使用，因为浏览器故意不让全屏下监听ESC键的，跟网页加载时不能用程序使浏览器全屏一样的道理（可以使用screnfull插件让某个dom全屏），避免开发者恶意全屏*/
       // quit(e){
       //   console.log('是否进入quit函数')
       //   let key=e.keyCode;
@@ -204,6 +237,34 @@
       //     this.flag = false
       //     this.isSwipper = false
       // }
+      previousPage() {
+        console.log('前一页')
+        //首先找到当前页面的src在列表的索引
+        let index = this.srcList.map(item => item).indexOf(this.src)
+        if (index === 0) {
+          this.src = this.srcList[this.srcList.length - 1]
+        } else {
+          this.src = this.srcList[index - 1]
+        }
+      },
+      nextPage() {
+        console.log('后一页')
+        //首先找到当前页面的src在列表的索引
+        let index = this.srcList.map(item => item).indexOf(this.src)
+        //如果为数组末尾
+        if (index + 1 === this.srcList.length) {
+          this.src = this.srcList[0]
+        } else {
+          this.src = this.srcList[index + 1]
+        }
+      },
+      changePauseStatus() {
+        this.pauseFlag = !this.pauseFlag
+        if (this.pauseFlag === false) {
+          let index = this.srcList.map(item => item).indexOf(this.src)
+          this.goToNewPage(index, this.srcList)
+        }
+      }
     }
   }
 </script>
@@ -215,31 +276,40 @@
     display: flex;
     flex-direction: column;
 
+    .box1 {
+      width: 100%;
+      height: 50px;
+      position: absolute;
+      /*这个border不能去，估计有border就把div在z轴方向放到iframe的前面，没有就把div放在了iframe的后面*/
+      border: 0.5px solid transparent;
+      /*这个z-index压根就没生效*/
+      z-index: 99;
+    }
+
+    .box2 {
+      display: none;
+      width: 100%;
+      height: 100%;
+      color: deeppink;
+      background-color: #0c1f48;
+      text-align: center;
+    }
+
+    .box1:hover .box2 {
+      display: block !important;
+    }
+
     .main {
       /*flex: 1;*/
       height: 100%;
       overflow-y: auto;
+      position: absolute;
 
       .frameStyle {
         height: 100%;
         width: 100%;
       }
     }
-
-    /*.main{*/
-    /*  flex: 1;*/
-    /*  background-color: red;*/
-    /*  .frameStyle {*/
-    /*    height: 90px;*/
-    /*    width: 1680px;*/
-    /*    margin-top: 5px;*/
-    /*    margin-left: 5px;*/
-    /*    overflow: Scroll;*/
-    /*    overflow-y: hidden;*/
-    /*    overflow-x: hidden*/
-    /*  }*/
-    /*}*/
   }
-
 </style>
 

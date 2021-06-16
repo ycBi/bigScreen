@@ -1,6 +1,12 @@
 <template>
   <div class="dashboard-style">
     <h1>欢迎使用盛帆大屏展示系统</h1>
+    <div style="display: block">
+      <i class="el-icon-edit"></i>
+      <i class="el-icon-share"></i>
+      <i class="el-icon-delete"></i>
+      <i>111</i>
+    </div>
   </div>
 </template>
 
@@ -9,14 +15,28 @@
     name: 'DashboardAdmin',
     data() {
       return {
+        carouselOption: true
       }
     },
     mounted() {
-      this.loadData()
     },
     created() {
+      // document.addEventListener('mousemove',function (e) {
+      //   //mousemove 只要鼠标一移动，就会触发事件
+      //   //获取鼠标最新的坐标
+      //   console.log(e.pageY)
+      //   console.log(e.pageX);
+      //   console.log('================================================================')
+      // })
     },
-    methods: {}
+    methods: {
+      showOption() {
+        console.log('enter')
+      },
+      hiddenOption() {
+        console.log('leave')
+      }
+    }
   }
 </script>
 
@@ -25,17 +45,5 @@
     height: 100%;
     width: 100%;
     border: 1px solid #ccc;
-    /*flex: 1;*/
-    .chart-style{
-      width: 100%;
-      height:100%;
-      background-color: #ffffff;
-      border: 1px solid #ccc;
-    }
   }
-
-  /*::v-deep .dashboard-container{*/
-  /*  width: 1000px;*/
-  /*  border: 1px solid #000;*/
-  /*}*/
 </style>

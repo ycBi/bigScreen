@@ -42,7 +42,6 @@
       }
     },
     created() {
-      console.log('role 36 '+this.isFullscreen)
     },
     mounted() {
       console.log('print route')
