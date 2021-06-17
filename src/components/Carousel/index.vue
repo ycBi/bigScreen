@@ -1,27 +1,26 @@
 <template>
-  <!--  这里使用v-show把iframe位置占着，因为使用v-if会出现拿到iframe这个对象为null(按道理说在mounted中应该dom已经渲染完成，但是我还是拿不到)-->
-  <div v-show="flag" class="container">
-    <div id="byc" class="main">
-      <!--      <div class="box1" @mouseenter="showOption" @mouseleave="hiddenOption">-->
-      <div class="box1">
-        <div class="box2">
-          <i class="el-icon-caret-left" style="font-size:30px;margin-right: 40px" @click="previousPage"></i>
-          <i :class='pauseFlag?"el-icon-video-pause":"el-icon-video-play"' style="font-size:30px"
-             @click="changePauseStatus"></i>
-          <i class="el-icon-caret-right" style="font-size:30px;margin-left: 40px" @click="nextPage"></i>
+    <!--  这里使用v-show把iframe位置占着，因为使用v-if会出现拿到iframe这个对象为null(按道理说在mounted中应该dom已经渲染完成，但是我还是拿不到)-->
+    <div v-show="flag" class="container">
+      <div id="byc" class="main">
+        <div class="box1">
+          <div class="box2">
+            <i class="el-icon-caret-left" style="font-size:30px;margin-right: 40px" @click="previousPage"></i>
+            <i :class='pauseFlag?"el-icon-video-pause":"el-icon-video-play"' style="font-size:30px"
+               @click="changePauseStatus"></i>
+            <i class="el-icon-caret-right" style="font-size:30px;margin-left: 40px" @click="nextPage"></i>
+          </div>
         </div>
+        <iframe
+          id="frame"
+          :src="src"
+          frameborder="no"
+          class="frameStyle"
+          name="frameName"
+          allowFullScreen
+          scrolling="yes"
+        />
       </div>
-      <iframe
-        id="frame"
-        :src="src"
-        frameborder="no"
-        class="frameStyle"
-        name="frameName"
-        allowFullScreen
-        scrolling="yes"
-      />
     </div>
-  </div>
 </template>
 
 <script>
@@ -36,7 +35,7 @@
         pauseFlag: false,
         flag: false, // 用于该组件的iframe是否显示
         isFullscreen: false,
-        src:'',
+        src: '',
         // isSwipper: false,
         srcList: []
         // srcList: ['http://localhost:50401/analysis/dashboard/show/03590db461799c1f107b/', 'http://localhost:50401/analysis/dashboard/show/09d756e23179a12580fb/', 'http://localhost:50401/analysis/dashboard/show/05cd39547179a1a1b489/']
@@ -46,9 +45,6 @@
       visitedViews() {
         return this.$store.state.tagsView.visitedViews
       },
-      // isFullscreen() {
-      //   return this.$store.state.carousel.isFull
-      // },
       isSwipper: {
         get() {
           return this.$store.state.carousel.isSwipper
@@ -57,7 +53,7 @@
         }
       },
       carouselTime() {
-        return this.$store.state.carousel.carouselTime
+        return this.$store.state.carousel.carouselTime*1000
       }
     },
     watch: {
@@ -67,6 +63,7 @@
         console.log('isSwipper watch ' + this.isSwipper)
         console.log('进入 mounted函数')
         if (newValue) {
+          console.log('!2234242153126156116179726963945993693969')
           this.flag = true
           this.click()
           console.log('carousel time ' + this.carouselTime)
@@ -91,68 +88,13 @@
       }
     },
     created() {
-      // window.addEventListener('click', function(e) {
-      //   //mousemove 只要鼠标一移动，就会触发事件
-      //   //获取鼠标最新的坐标
-      //   console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-      //   console.log(e.pageY)
-      //   console.log(e.pageX)
-      //   console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-      // })
-      // window.addEventListener('click', function(e) {
-      //   //mousemove 只要鼠标一移动，就会触发事件
-      //   //获取鼠标最新的坐标
-      //   console.log('============================================================')
-      //   console.log(e.pageY)
-      //   console.log(e.pageX)
-      //   console.log('============================================================')
-      // })
     },
     mounted() {
       if (this.$route.meta.hasOwnProperty('src')) {
         this.src = this.$route.meta.src
       }
       document.addEventListener('fullscreenchange', this.fullScreenEsc)
-      // console.log('init before'+this.isFullscreen)
-      // console.log('swipper status '+ this.isSwipper)
       this.init()
-      // if (this.isSwipper){
-      //   this.click()
-      //   // this.click("isswipper role  "+data)
-      // }
-      // console.log('full screen statsus '+this.isFullscreen)
-      // 用$on监听事件并接受数据
-      // Bus.$on('role', (data) => {
-      //   console.log('receive' + data)
-      //   // setTimeout(this.click(), 1000)
-      //   this.click()
-      // })
-      // })
-      // Bus.$on('startSwipper', (data) => {
-      //   console.log('isswipper role  ' + data)
-      //   this.isSwipper = data
-      //   console.log(' role swipper status 42 ' + this.isSwipper)
-      //   if (this.isSwipper) {
-      //     this.click()
-      //     this.goToNewPage(0,this.srcList)
-      //   }
-      // })
-      // console.log('进入 mounted函数')
-      // this.click()
-      // this.goToNewPage(0,this.srcList)
-      // if (this.isSwipper){
-      console.log('进入 mounted函数')
-      // this.click()
-      //   this.goToNewPage()
-      // }
-      // console.log("2222"+this.isFullscreen)
-      //   Bus.$on('isSwipper',(data)=>{
-      //     console.log("isswipper role  "+data)
-      //     this.isSwipper = data
-      //   })
-      // console.log(" role swipper status "+this.isSwipper)
-      // if (this.isSwipper&&this.isFullscreen)
-      //   this.click()
     },
     beforeDestroy() {
       document.removeEventListener('fullscreenchange', this.fullScreenEsc)
@@ -206,7 +148,7 @@
           this.isFullscreen = false
           console.log('监听到了退出了全屏事件~~~~~~~~~~~~~~~~~~')
           this.flag = false
-          this.$store.dispatch('carousel/changeSwipperStatus')
+          this.$store.dispatch('carousel/changeSwipperStatus',false)
         }
       },
       // 全屏判断状态 取消
@@ -290,8 +232,8 @@
       display: none;
       width: 100%;
       height: 100%;
-      color: deeppink;
-      background-color: #0c1f48;
+      color: #ffffff;
+      background-color: rgba(0, 0, 0, 0.5);
       text-align: center;
     }
 

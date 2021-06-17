@@ -2,10 +2,13 @@
   <div class="dashboard-style">
     <h1>欢迎使用盛帆大屏展示系统</h1>
     <div style="display: block">
-      <i class="el-icon-edit"></i>
-      <i class="el-icon-share"></i>
-      <i class="el-icon-delete"></i>
-      <i>111</i>
+      <ul>
+        <li>大屏介绍</li>
+        <li>注意事项</li>
+        <li>大屏教程</li>
+        <li>1111</li>
+        <li>2222</li>
+      </ul>
     </div>
   </div>
 </template>

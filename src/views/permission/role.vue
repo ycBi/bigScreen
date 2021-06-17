@@ -21,13 +21,9 @@
       return {
         isFullscreen: false,
         src:''
-        // isSwipper: false
       }
     },
     computed:{
-      // isFullscreen() {
-      //   return this.$store.state.carousel.isFull
-      // },
       isSwipper() {
         return this.$store.state.carousel.isSwipper
       }
@@ -35,47 +31,19 @@
     watch: {
       $route: {
         handler: function(route) {
-          console.log('route   ')
           console.log(route)
         },
         immediate: true
       }
     },
-    created() {
-    },
     mounted() {
-      console.log('print route')
-      // console.log(this.$route.meta.src)
       this.src = this.$route.meta.src
-      // console.log('init before'+this.isFullscreen)
-      // console.log('swipper status '+ this.isSwipper)
       this.init()
-      // if (this.isSwipper){
-      //   this.click()
-      //   // this.click("isswipper role  "+data)
-      // }
-      // console.log('full screen statsus '+this.isFullscreen)
       // 用$on监听全屏事件并接受数据
       Bus.$on('role', (data) => {
         console.log('receive' + data)
-        // setTimeout(this.click(), 1000)
         this.click()
       })
-      // }).$on('isSwipper',(data)=>{
-      //   console.log("isswipper role  "+data)
-      //   this.isSwipper = data
-      //   console.log(" role swipper status 42 "+this.isSwipper)
-      //   this.click()
-      // })
-      // console.log("2222"+this.isFullscreen)
-      //   Bus.$on('isSwipper',(data)=>{
-      //     console.log("isswipper role  "+data)
-      //     this.isSwipper = data
-      //   })
-      // console.log(" role swipper status "+this.isSwipper)
-      // if (this.isSwipper&&this.isFullscreen)
-      //   this.click()
-
     },
     methods: {
       click() {
@@ -102,6 +70,7 @@
       destroy() {
         if (screenfull.enabled) {
           screenfull.off('change', this.change)
+          console.log('73====================退出全屏')
         }
       }
     }
@@ -125,20 +94,6 @@
         width: 100%;
       }
     }
-
-    /*.main{*/
-    /*  flex: 1;*/
-    /*  background-color: red;*/
-    /*  .frameStyle {*/
-    /*    height: 90px;*/
-    /*    width: 1680px;*/
-    /*    margin-top: 5px;*/
-    /*    margin-left: 5px;*/
-    /*    overflow: Scroll;*/
-    /*    overflow-y: hidden;*/
-    /*    overflow-x: hidden*/
-    /*  }*/
-    /*}*/
   }
 
 </style>

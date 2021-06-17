@@ -5,7 +5,7 @@
         v-for="tag in visitedViews"
         ref="tag"
         :key="tag.path"
-        :class="isActive(tag)?'active':''"
+        :class="isActive(tag)?'active':'noActive'"
         :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
         tag="span"
         class="tags-view-item"
@@ -201,7 +201,7 @@ export default {
 .tags-view-container {
   height: 34px;
   width: 100%;
-  background: #fff;
+  background: #21304c;
   border-bottom: 1px solid #d8dce5;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 0 3px 0 rgba(0, 0, 0, .04);
   .tags-view-wrapper {
@@ -225,9 +225,24 @@ export default {
         margin-right: 15px;
       }
       &.active {
-        background-color: #42b983;
+        background-color: #576d8c;
         color: #fff;
-        border-color: #42b983;
+        border-color: #576d8c;
+        &::before {
+          content: '';
+          background: #fff;
+          display: inline-block;
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          position: relative;
+          margin-right: 2px;
+        }
+      }
+      &.noActive{
+        background-color: #21304c;
+        color: #fff;
+        border-color: #21304c;
         &::before {
           content: '';
           background: #fff;

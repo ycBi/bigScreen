@@ -148,7 +148,7 @@ export const asyncRoutes = [
         name: 'carousel',
         meta: {
           src: 'http://localhost:50401/analysis/dashboard/show/03590db461799c1f107b/',
-          title: 'carousel',
+          title: '四号大厅展示',
           roles: ['admin']
         }
       }
