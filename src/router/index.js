@@ -36,24 +36,12 @@ import Layout from '@/layout'
  */
 export const constantRoutes = [
   {
-    path: '/redirect',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: '/redirect/:path(.*)',
-        component: () => import('@/views/redirect/index')
-      }
-    ]
+    path: '/',
+    redirect: '/login',
   },
   {
     path: '/login',
     component: () => import('@/views/login/index'),
-    hidden: true
-  },
-  {
-    path: '/auth-redirect',
-    component: () => import('@/views/login/auth-redirect'),
     hidden: true
   },
   {
@@ -67,12 +55,11 @@ export const constantRoutes = [
     hidden: true
   },
   {
-    path: '/',
+    path: '/dashboard',
     component: Layout,
-    redirect: '/dashboard',
     children: [
       {
-        path: 'dashboard',
+        path: '',
         component: () => import('@/views/dashboard/index'),
         name: 'dashboard',
         meta: { title: '首页', icon: 'dashboard', affix: true }
@@ -109,7 +96,6 @@ export const asyncRoutes = [
     meta: {
       title: '大屏展示',
       icon: 'lock',
-      roles: ['admin', 'editor'] // you can set roles in root nav
     },
     children: [
       {
@@ -119,7 +105,6 @@ export const asyncRoutes = [
         meta: {
           title: '一号大厅展示',
           src: 'http://localhost:50401/analysis/dashboard/show/03590db461799c1f107b/',
-          roles: ['admin'] // or you can only set roles in sub nav
         }
       },
       {
@@ -129,7 +114,6 @@ export const asyncRoutes = [
         meta: {
           title: '二号大厅展示',
           src: 'http://localhost:50401/analysis/dashboard/show/05cd39547179a1a1b489/'
-          // if do not set roles, means: this page does not require permission
         }
       },
       {
@@ -139,7 +123,6 @@ export const asyncRoutes = [
         meta: {
           title: '三号大厅展示',
           src: 'http://localhost:50401/analysis/dashboard/show/09d756e23179a12580fb/',
-          roles: ['admin']
         }
       }
       , {
@@ -149,7 +132,6 @@ export const asyncRoutes = [
         meta: {
           src: 'http://localhost:50401/analysis/dashboard/show/03590db461799c1f107b/',
           title: '四号大厅展示',
-          roles: ['admin']
         }
       }
     ]
@@ -160,7 +142,6 @@ export const asyncRoutes = [
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
   routes: constantRoutes
 })
 

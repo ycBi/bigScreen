@@ -32,6 +32,7 @@ export default {
   width: 100%;
   position: relative;
   display: flex;
+  background-color: #2c3e50;
   /*overflow: hidden;*/
 
 

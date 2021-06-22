@@ -1,14 +1,9 @@
 <template>
   <div class="sidebar-logo-container">
     <transition name="sidebarLogoFade">
-      <router-link class="sidebar-logo-link" to="/">
+      <router-link class="sidebar-logo-link" to="/dashboard">
         <img  :src="logo" class="sidebar-logo">
-        <h1 class="sidebar-title">{{title}}</h1>
       </router-link>
-<!--      <router-link v-else key="expand" class="sidebar-logo-link" to="/">-->
-<!--        <img v-if="logo" :src="logo" class="sidebar-logo">-->
-<!--        <h1 class="sidebar-title">{{title}}</h1>-->
-<!--      </router-link>-->
     </transition>
   </div>
 </template>
@@ -16,16 +11,9 @@
 <script>
 export default {
   name: 'SidebarLogo',
-  props: {
-    // collapse: {
-    //   type: Boolean,
-    //   required: true
-    // }
-  },
   data() {
     return {
-      title: 'Sanfran',
-      logo: require('@/assets/image/sf.jpg')
+      logo: require('@/assets/image/sf1.png')
     }
   }
 }
@@ -46,7 +34,7 @@ export default {
   width: 100%;
   height: 50px;
   line-height: 50px;
-  background: #1972c6;
+  background: #ffffff;
   text-align: center;
   overflow: hidden;
 
@@ -55,8 +43,8 @@ export default {
     width: 100%;
 
     & .sidebar-logo {
-      width: 32px;
-      height: 32px;
+      width: 150px;
+      height: 40px;
       vertical-align: middle;
       margin-right: 12px;
     }

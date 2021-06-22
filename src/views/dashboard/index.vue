@@ -1,31 +1,37 @@
 <template>
   <div class="dashboard-container">
-    <component :is="currentRole" />
+    <div class="dashboard-style">
+      <h1>欢迎使用盛帆大屏展示系统</h1>
+      <div style="display: block">
+        <ul>
+          <li>大屏介绍</li>
+          <li>注意事项</li>
+          <li>大屏教程</li>
+          <li>1111</li>
+          <li>2222</li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import adminDashboard from './admin'
-import editorDashboard from './editor'
-
 export default {
   name: 'Dashboard',
-  components: { adminDashboard, editorDashboard },
   data() {
     return {
-      currentRole: 'adminDashboard'
     }
-  },
-  computed: {
-    ...mapGetters([
-      'roles'
-    ])
   },
   created() {
-    if (!this.roles.includes('admin')) {
-      this.currentRole = 'editorDashboard'
-    }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .dashboard-style {
+    color: #ffffff;
+    height: 100%;
+    width: 100%;
+
+  }
+</style>
