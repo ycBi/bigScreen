@@ -12,9 +12,8 @@
 </template>
 
 <script>
-  import RightPanel from '@/components/RightPanel'
   import Carousel from '@/components/Carousel'
-  import { AppMain, Navbar, Settings, Sidebar, TagsView } from './components'
+  import { AppMain, Navbar, Sidebar, TagsView } from './components'
   import ResizeMixin from './mixin/ResizeHandler'
   import { mapState } from 'vuex'
 
@@ -23,8 +22,6 @@
     components: {
       AppMain,
       Navbar,
-      RightPanel,
-      Settings,
       Sidebar,
       TagsView,
       Carousel

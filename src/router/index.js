@@ -36,12 +36,24 @@ import Layout from '@/layout'
  */
 export const constantRoutes = [
   {
-    path: '/',
-    redirect: '/login',
+    path: '/redirect',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: '/redirect/:path(.*)',
+        component: () => import('@/views/redirect/index')
+      }
+    ]
   },
   {
     path: '/login',
     component: () => import('@/views/login/index'),
+    hidden: true
+  },
+  {
+    path: '/auth-redirect',
+    component: () => import('@/views/login/auth-redirect'),
     hidden: true
   },
   {
@@ -55,11 +67,12 @@ export const constantRoutes = [
     hidden: true
   },
   {
-    path: '/dashboard',
+    path: '/',
     component: Layout,
+    redirect: '/dashboard',
     children: [
       {
-        path: '',
+        path: 'dashboard',
         component: () => import('@/views/dashboard/index'),
         name: 'dashboard',
         meta: { title: '首页', icon: 'dashboard', affix: true }
@@ -96,6 +109,7 @@ export const asyncRoutes = [
     meta: {
       title: '大屏展示',
       icon: 'lock',
+      roles: ['admin', 'editor']
     },
     children: [
       {
@@ -105,6 +119,7 @@ export const asyncRoutes = [
         meta: {
           title: '一号大厅展示',
           src: 'http://localhost:50401/analysis/dashboard/show/03590db461799c1f107b/',
+          roles: ['admin', 'editor']
         }
       },
       {
@@ -113,7 +128,8 @@ export const asyncRoutes = [
         name: 'DirectivePermission',
         meta: {
           title: '二号大厅展示',
-          src: 'http://localhost:50401/analysis/dashboard/show/05cd39547179a1a1b489/'
+          src: 'http://localhost:50401/analysis/dashboard/show/05cd39547179a1a1b489/',
+          roles: ['admin', 'editor']
         }
       },
       {
@@ -123,6 +139,7 @@ export const asyncRoutes = [
         meta: {
           title: '三号大厅展示',
           src: 'http://localhost:50401/analysis/dashboard/show/09d756e23179a12580fb/',
+          roles: ['admin', 'editor']
         }
       }
       , {
@@ -132,6 +149,7 @@ export const asyncRoutes = [
         meta: {
           src: 'http://localhost:50401/analysis/dashboard/show/03590db461799c1f107b/',
           title: '四号大厅展示',
+          roles: ['admin', 'editor']
         }
       }
     ]
@@ -142,6 +160,7 @@ export const asyncRoutes = [
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
+  scrollBehavior: () => ({ y: 0 }),
   routes: constantRoutes
 })
 
@@ -151,6 +170,26 @@ const router = createRouter()
 export function resetRouter() {
   const newRouter = createRouter()
   router.matcher = newRouter.matcher // reset router
+}
+
+export function filterRouter(routers) {             // 遍历后台传来的路由字符串，转换为组件对象
+  const accessedRouters = routers.filter(route => {
+    if (route.component) {
+      if (route.component === 'Layout') {     // Layout组件特殊处理
+        route.component = Layout
+      } else {
+        // route.component = eval(route.component)
+        //() => import('@/views/permission/role')这种格式无法当成java代码来执行
+        // console.log(route.component)
+        route.component = () => import('@/views/permission/role')
+      }
+    }
+    if (route.children && route.children.length) {
+      route.children = filterRouter(route.children)
+    }
+    return true
+  })
+  return accessedRouters
 }
 
 export default router

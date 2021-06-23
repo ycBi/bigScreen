@@ -5,6 +5,7 @@ import axios from 'axios';
 import {Message, Notification} from 'element-ui';
 import store from '../store/index'
 import config from './config'
+import { getToken } from '@/utils/auth' // get token from cookie
 
 // 环境的切换
 if (process.env.NODE_ENV == 'development') {
@@ -26,13 +27,19 @@ axios.interceptors.request.use(
   config => {
     // 每次发送请求之前判断是否存在token，如果存在，则统一在http请求的header都加上token，不用每次请求都手动添加了
     // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
-    const token = store.state.token;
+    // 登录流程控制中，根据本地是否存在token判断用户的登录情况
+    // 但是即使token存在，也有可能token是过期的，所以在每次的请求头中携带token
+    // 后台根据携带的token判断用户的登录情况，并返回给我们对应的状态码
+    // 而后我们可以在响应拦截器中，根据状态码进行一些统一的操作。
+    const token = getToken()
+    console.log(getToken())
     token && (config.headers.Authorization = token);
     return config;
   },
   error => {
     return Promise.error(error);
   })
+
 
 // 响应拦截器
 axios.interceptors.response.use(

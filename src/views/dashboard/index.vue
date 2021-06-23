@@ -18,12 +18,6 @@
 <script>
 export default {
   name: 'Dashboard',
-  data() {
-    return {
-    }
-  },
-  created() {
-  }
 }
 </script>
 

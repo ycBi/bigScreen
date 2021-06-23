@@ -25,8 +25,11 @@ export default {
       return 'router-link'
     }
   },
+  mounted(){
+  },
   methods: {
     linkProps(to) {
+      console.log(to)
       if (this.isExternal) {
         return {
           href: to,
