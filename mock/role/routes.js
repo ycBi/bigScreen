@@ -74,9 +74,9 @@ const constantRoutes = [
 
 const asyncRoutes = [
   {
-    path: '/permission',
+    path: '/display',
     component: 'layout/Layout',
-    redirect: '/permission/index',
+    redirect: '/display/index',
     alwaysShow: true,
     meta: {
       title: 'Permission',
@@ -86,7 +86,7 @@ const asyncRoutes = [
     children: [
       {
         path: 'page',
-        component: 'views/permission/page',
+        component: 'views/display/page',
         name: 'PagePermission',
         meta: {
           title: 'Page Permission',
@@ -95,7 +95,7 @@ const asyncRoutes = [
       },
       {
         path: 'directive',
-        component: 'views/permission/directive',
+        component: 'views/display/directive',
         name: 'DirectivePermission',
         meta: {
           title: 'Directive Permission'
@@ -103,7 +103,7 @@ const asyncRoutes = [
       },
       {
         path: 'role',
-        component: 'views/permission/role',
+        component: 'views/display/role',
         name: 'RolePermission',
         meta: {
           title: 'Role Permission',

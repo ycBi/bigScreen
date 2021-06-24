@@ -31,7 +31,7 @@ import Layout from '@/layout'
 
 /**
  * constantRoutes
- * a base page that does not have permission requirements
+ * a base page that does not have display requirements
  * all roles can be accessed
  */
 export const constantRoutes = [
@@ -101,11 +101,11 @@ export const constantRoutes = [
  */
 export const asyncRoutes = [
   {
-    path: '/permission',
+    path: '/display',
     component: Layout,
-    redirect: '/permission/page',
+    redirect: '/display/page',
     alwaysShow: true, // will always show the root menu
-    name: 'Permission',
+    name: 'exhibition',
     meta: {
       title: '大屏展示',
       icon: 'lock',
@@ -113,9 +113,9 @@ export const asyncRoutes = [
     },
     children: [
       {
-        path: 'page',
-        component: () => import('@/views/permission/role'),
-        name: 'PagePermission',
+        path: 'firstHall',
+        component: () => import('@/views/display/display'),
+        name: 'firstHall',
         meta: {
           title: '一号大厅展示',
           src: 'http://localhost:50401/analysis/dashboard/show/03590db461799c1f107b/',
@@ -123,9 +123,9 @@ export const asyncRoutes = [
         }
       },
       {
-        path: 'directive',
-        component: () => import('@/views/permission/role'),
-        name: 'DirectivePermission',
+        path: 'secondHall',
+        component: () => import('@/views/display/display'),
+        name: 'secondHall',
         meta: {
           title: '二号大厅展示',
           src: 'http://localhost:50401/analysis/dashboard/show/05cd39547179a1a1b489/',
@@ -133,9 +133,9 @@ export const asyncRoutes = [
         }
       },
       {
-        path: 'role',
-        component: () => import('@/views/permission/role'),
-        name: 'RolePermission',
+        path: 'thirdHall',
+        component: () => import('@/views/display/display'),
+        name: 'thirdHall',
         meta: {
           title: '三号大厅展示',
           src: 'http://localhost:50401/analysis/dashboard/show/09d756e23179a12580fb/',
@@ -143,9 +143,9 @@ export const asyncRoutes = [
         }
       }
       , {
-        path: 'firstHall',
-        component: () => import('@/views/permission/role'),
-        name: 'carousel',
+        path: 'fourthHall',
+        component: () => import('@/views/display/display'),
+        name: 'fourthHall',
         meta: {
           src: 'http://localhost:50401/analysis/dashboard/show/03590db461799c1f107b/',
           title: '四号大厅展示',
@@ -172,16 +172,21 @@ export function resetRouter() {
   router.matcher = newRouter.matcher // reset router
 }
 
-export function filterRouter(routers) {             // 遍历后台传来的路由字符串，转换为组件对象
+export function filterRouter(routers) {
+  // 遍历后台传来的路由字符串，转换为组件对象
   const accessedRouters = routers.filter(route => {
     if (route.component) {
       if (route.component === 'Layout') {     // Layout组件特殊处理
         route.component = Layout
       } else {
         // route.component = eval(route.component)
-        //() => import('@/views/permission/role')这种格式无法当成java代码来执行
-        // console.log(route.component)
-        route.component = () => import('@/views/permission/role')
+        //() => import('@/views/display/role')这种格式无法当成java代码来执行
+        //还有一种方法为测试,路由的componen后面直接跟组件名称，导入在文件最开始引入，然后引入一个方法
+        // route.component = _import(route.component)
+        // function _import (file) {
+        //   return () => import('@/components/views/' + file + '.vue')
+        // }
+        route.component = () => import('@/views/display/display')
       }
     }
     if (route.children && route.children.length) {

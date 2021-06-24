@@ -17,7 +17,7 @@
           class="frameStyle"
           name="frameName"
           allowFullScreen
-          scrolling="yes"
+          scrolling="no"
         />
       </div>
     </div>
@@ -244,7 +244,8 @@
     .main {
       /*flex: 1;*/
       height: 100%;
-      overflow-y: auto;
+      /*overflow-y: auto;*/
+      overflow-y: hidden;
       position: absolute;
 
       .frameStyle {

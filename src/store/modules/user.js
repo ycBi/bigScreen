@@ -49,7 +49,7 @@ const actions = {
         if (!data) {
           reject('Verification failed, please Login again.')
         }
-        const roles = data
+        const roles = JSON.parse(data)
         // roles must be a non-empty array
         if ( roles.length <= 0) {
           reject('getInfo: roles must be a non-null array!')
@@ -104,7 +104,7 @@ const actions = {
     resetRouter()
 
     // generate accessible routes map based on roles
-    const accessRoutes = await dispatch('permission/generateRoutes', roles, { root: true })
+    const accessRoutes = await dispatch('display/generateRoutes', roles, { root: true })
     // dynamically add accessible routes
     router.addRoutes(accessRoutes)
 
