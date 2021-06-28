@@ -103,7 +103,7 @@ export const asyncRoutes = [
   {
     path: '/display',
     component: Layout,
-    redirect: '/display/page',
+    redirect: '/display/firstHall',
     alwaysShow: true, // will always show the root menu
     name: 'exhibition',
     meta: {
@@ -118,7 +118,7 @@ export const asyncRoutes = [
         name: 'firstHall',
         meta: {
           title: '一号大厅展示',
-          src: 'http://localhost:50401/analysis/dashboard/show/03590db461799c1f107b/',
+          src: 'http://192.168.7.156:50401/analysis/dashboard/show/2ab19145517a18d28721/',
           roles: ['admin', 'editor']
         }
       },
@@ -128,7 +128,7 @@ export const asyncRoutes = [
         name: 'secondHall',
         meta: {
           title: '二号大厅展示',
-          src: 'http://localhost:50401/analysis/dashboard/show/05cd39547179a1a1b489/',
+          src: 'http://192.168.7.219:50401/analysis/dashboard/show/05cd39547179a1a1b489/',
           roles: ['admin', 'editor']
         }
       },
@@ -138,7 +138,7 @@ export const asyncRoutes = [
         name: 'thirdHall',
         meta: {
           title: '三号大厅展示',
-          src: 'http://localhost:50401/analysis/dashboard/show/09d756e23179a12580fb/',
+          src: 'http://192.168.7.219:50401/analysis/dashboard/show/09d756e23179a12580fb/',
           roles: ['admin', 'editor']
         }
       }
@@ -147,7 +147,7 @@ export const asyncRoutes = [
         component: () => import('@/views/display/display'),
         name: 'fourthHall',
         meta: {
-          src: 'http://localhost:50401/analysis/dashboard/show/03590db461799c1f107b/',
+          src: 'http://192.168.7.219:50401/analysis/dashboard/show/03590db461799c1f107b/',
           title: '四号大厅展示',
           roles: ['admin', 'editor']
         }
@@ -155,8 +155,37 @@ export const asyncRoutes = [
     ]
   },
   // 404 page must be placed at the end !!!
+  // { path: '*', redirect: '/404', hidden: true }
+]
+
+export const manageRoutes = [
+  {
+    path: '/manage',
+    component: Layout,
+    redirect: '/manage/route',
+    alwaysShow: true, // will always show the root menu
+    name: 'manageRoute',
+    meta: {
+      title: '路由管理',
+      icon: 'form',
+      roles: ['admin', 'editor']
+    },
+    children: [
+      {
+        path: 'route',
+        component: () => import('@/views/manageRoute/index'),
+        name: 'route',
+        meta: {
+          title: '路由管理',
+          roles: ['admin', 'editor']
+        }
+      },
+    ]
+  },
+  // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
+
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support

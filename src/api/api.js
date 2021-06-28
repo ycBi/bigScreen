@@ -12,4 +12,4 @@ export const getLoginToken = (params) => post('/user/login',params)
 export const getUserInfo = () => get('/user/getUserInfo',{})
 
 //根据用户的权限获取路由
-export const getRouterList = () => get('/user/getRouteList',{})
+export const getRouterList = (param) => get('/router/getList',{role:param})

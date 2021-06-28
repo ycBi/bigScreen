@@ -7,7 +7,7 @@
         :collapse="isCollapse"
         :background-color="variables.menuBg"
         :text-color="variables.menuText"
-        :unique-opened="false"
+        :unique-opened="true"
         :active-text-color="variables.menuActiveText"
         :collapse-transition="false"
         mode="vertical"
@@ -57,8 +57,6 @@ export default {
     }
   },
   mounted() {
-    console.log('sidebar=================================================')
-    console.log(this.permission_routes)
     // getRouterList().then((res)=>{
     //   this.permission_routes = res.data
     // })
