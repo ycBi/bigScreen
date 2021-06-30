@@ -16,11 +16,29 @@ if (process.env.NODE_ENV == 'development') {
   axios.defaults.baseURL =  config.baseUrl;
 }
 
+//序列化post请求参数
+let serializePostParams = (obj) => {
+  let temp = [];
+  if (!obj || typeof obj !== 'object') {
+    return obj;
+  }
+  Object.keys(obj).map(key => {
+    if (obj[key] || obj[key] == 0) {
+      temp.push(`${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`);
+    }
+  });
+  return temp.join('&');
+};
+
 // 请求超时时间
 axios.defaults.timeout = 10000;
 
 // post请求头
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
+
+//POST请求格式为'application/json'的API白名单
+let postJsonApiWhiteList = ['/user/login','/router/updateRoutes']
+
 
 // 请求拦截器
 axios.interceptors.request.use(
@@ -35,6 +53,15 @@ axios.interceptors.request.use(
     console.log(getToken())
     // token && (config.headers.Authorization = token);
     config.headers.token = token
+
+    //针对put,post请求，处理提交的数据
+    if (config.method === 'post' || config.method === 'put') {
+      if (postJsonApiWhiteList.includes(config.url)) {
+        config.headers['Content-Type'] = 'application/json';
+      } else {
+        config.data = serializePostParams(config.data);
+      }
+    }
     return config;
   },
   error => {

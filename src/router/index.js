@@ -151,9 +151,9 @@ export const asyncRoutes = [
           title: '四号大厅展示',
           roles: ['admin', 'editor']
         }
-      }
+      },
     ]
-  },
+  }
   // 404 page must be placed at the end !!!
   // { path: '*', redirect: '/404', hidden: true }
 ]
@@ -179,13 +179,12 @@ export const manageRoutes = [
           title: '路由管理',
           roles: ['admin', 'editor']
         }
-      },
+      }
     ]
   },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
-
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support

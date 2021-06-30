@@ -10,11 +10,11 @@
       <span slot="footer" class="dialog-footer">
         <el-form ref="form" :model="form" label-width="80px">
 <!--          <el-form-item label="path: ">-->
-<!--            <el-input v-model="form.path"></el-input>-->
-<!--          </el-form-item>-->
-<!--          <el-form-item label="name: ">-->
-<!--            <el-input v-model="form.name"></el-input>-->
-<!--          </el-form-item>-->
+          <!--            <el-input v-model="form.path"></el-input>-->
+          <!--          </el-form-item>-->
+          <!--          <el-form-item label="name: ">-->
+          <!--            <el-input v-model="form.name"></el-input>-->
+          <!--          </el-form-item>-->
           <el-form-item label="路由: ">
             <el-input v-model="form.src"></el-input>
           </el-form-item>
@@ -28,7 +28,6 @@
     </el-dialog>
     <el-tree
       :data="routeList"
-      show-checkbox
       node-key="path"
       ref="tree"
       default-expand-all
@@ -61,97 +60,87 @@
 </template>
 
 <script>
+  import { getRouterList, updateRouterList } from '@/api/api'
+  import { filterRouter } from '../../router'
+
   export default {
     name: 'index',
     data() {
-      const routeList = [
-        {
-          path: '/display',
-          redirect: '/display/firstHall',
-          name: 'exhibition',
-          meta: {
-            title: '大屏展示',
-            icon: 'lock'
-          },
-          children: [
-            {
-              path: 'firstHall',
-              name: 'firstHall',
-              meta: {
-                title: '一号大厅展示',
-                src: 'http://192.168.7.156:50401/analysis/dashboard/show/2ab19145517a18d28721/'
-              }
-            },
-            {
-              path: 'secondHall',
-              name: 'secondHall',
-              meta: {
-                title: '二号大厅展示',
-                src: 'http://localhost:50401/analysis/dashboard/show/05cd39547179a1a1b489/',
-                roles: ['admin', 'editor']
-              }
-            },
-            {
-              path: 'thirdHall',
-              name: 'thirdHall',
-              meta: {
-                title: '三号大厅展示',
-                src: 'http://localhost:50401/analysis/dashboard/show/09d756e23179a12580fb/',
-                roles: ['admin', 'editor']
-              }
-            }
-            , {
-              path: 'fourthHall',
-              name: 'fourthHall',
-              meta: {
-                title: '四号大厅展示',
-                src: 'http://localhost:50401/analysis/dashboard/show/03590db461799c1f107b/',
-                roles: ['admin', 'editor']
-              }
-            }
-          ]
-        }
-      ]
       return {
         id: 1,
-        routeList: routeList,
+        routeList: [],
         dialogVisible: false,
         form: {
           src: '',
           title: ''
         },
-        routePaths: [],//route中的path数组
-        routeNames: [],//route中的name数组
-        nodeTempDta:{} //存放临时数据节点
+        nodeTempDta: {}, //存放临时数据节点
+        status: 1 //1:状态是添加 2：状态是修改
+      }
+    },
+    computed: {
+      roles: {
+        get() {
+          return this.$store.state.user.roles
+        },
+        set() {
+        }
       }
     },
     mounted() {
-      // this.routePaths = this.getRoutePaths()
-      // this.routeNames = this.getRouteNames()
+      getRouterList(this.roles[0]).then((res) => {
+        this.routeList = JSON.parse(res.data)
+      }).catch(() => {
+        this.$message.error('获取列表信息失败！')
+      })
     },
     methods: {
       add() {
-        // let data = this.$refs.tree.getCheckedNodes()[0]
-        // if (this.routePaths.includes(this.form.path)) {
-        //   this.$message.error('你输入的path已经存在了')
-        //   return
-        // }
-        // if (this.routeNames.includes(this.form.name)){
-        //   this.$message.error('你输入的name已经存在了')
-        //   return
-        // }
+        //这个data为routeList的某一个子节点的对象引用
         let data = this.nodeTempDta
-        let timeStamp = Date.parse(new Date())
-        const newChild = {
-          path: timeStamp, name: timeStamp, meta: {
-            title: this.form.title,
-            src: this.form.src
+        //添加
+        if (this.status === 1) {
+          let timeStamp = Date.parse(new Date())
+          const newChild = {
+            path: String(timeStamp),
+            name: String(timeStamp),
+            component: '() => import(\'@/views/display/display\')',
+            meta: {
+              title: this.form.title,
+              src: this.form.src,
+              roles: ['admin', 'editor']
+            }
           }
+          if (!data.children) {
+            this.$set(data, 'children', [])
+          }
+          data.children.push(newChild)
+          //请求后台接口
+          updateRouterList(this.roles[0], JSON.stringify(this.routeList)).then((res) => {
+            console.log(res)
+            this.$message.success('添加成功')
+          }).catch(() => {
+            this.$message.error('添加失败')
+            //数据还原
+            data.children.pop(newChild)
+          })
         }
-        if (!data.children) {
-          this.$set(data, 'children', [])
+        //修改
+        if ( this.status === 2){
+          let srcTemp = data.meta.src
+          let titleTemp = data.meta.title
+          data.meta.src = this.form.src
+          data.meta.title = this.form.title
+          updateRouterList(this.roles[0], JSON.stringify(this.routeList)).then((res) => {
+            console.log(res)
+            this.$message.success('修改成功')
+          }).catch(() => {
+            this.$message.error('修改失败')
+            //数据还原为之前值
+            data.meta.src = srcTemp
+            data.meta.title = titleTemp
+          })
         }
-        data.children.push(newChild)
         this.dialogVisible = false
       },
       append(data) {
@@ -159,60 +148,33 @@
           src: '',
           title: ''
         }
-        console.log('data 160',data)
+        console.log('data 160', data)
         this.nodeTempDta = data
+        this.status = 1
         this.dialogVisible = true
       },
       update(data) {
+        this.status = 2
         this.dialogVisible = true
         this.nodeTempDta = data
         // let data = this.$refs.tree.getCheckedNodes()[0]
-        this.form.path = data.path
-        this.form.name = data.name
         this.form.title = data.meta.title
         this.form.src = data.meta.src
-
       },
       remove(node, data) {
         const parent = node.parent
         const children = parent.data.children || parent.data
         const index = children.findIndex(d => d.path === data.path)
         children.splice(index, 1)
-      },
-      //求路由list里的path数组
-      // getRoutePaths() {
-      //   let paths = []
-      //   this.getPaths(this.routeList,paths)
-      //   return paths
-      // },
-      //递归
-      // getPaths(lst, paths) {
-      //   lst.forEach((arg) => {
-      //     paths.push(arg.path)
-      //     if (arg.children) {
-      //       this.getPaths(arg.children, paths)
-      //     }
-      //     else
-      //       return
-      //   })
-      // },
-      //求路由list里的name数组
-      // getRouteNames() {
-      //   let names = []
-      //   this.getNames(this.routeList,names)
-      //   return names
-      // },
-      //递归
-      // getNames(lst, names) {
-      //   lst.forEach((arg) => {
-      //     names.push(arg.name)
-      //     if (arg.children) {
-      //       this.getPaths(arg.children, names)
-      //     }
-      //     else
-      //       return
-      //   })
-      // },
+        updateRouterList(this.roles[0], JSON.stringify(this.routeList)).then((res) => {
+          console.log(res)
+          this.$message.success('删除成功')
+        }).catch(() => {
+          this.$message.error('删除失败')
+          //数据还原为之前值(将删除的值插入)
+          children.splice(index,0,data)
+        })
+      }
     }
   }
 </script>
