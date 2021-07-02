@@ -62,12 +62,54 @@ const actions = {
       // }
 
       // let role = roles.trim().replace('[','').replace(']','')
-      let role = JSON.parse(roles)[0]
-      getRouterList(role).then((res)=>{
-        let accessedRoutesTemp = JSON.parse(res.data)
-        accessedRoutes = filterRouter(accessedRoutesTemp)
-        accessedRoutes = accessedRoutes.concat(manageRoutes)
-        console.log('accessedRoutes',accessedRoutes)
+
+      //使用本地路由接口
+      // let role = JSON.parse(roles)[0]
+      // getRouterList(role).then((res)=>{
+      //   let accessedRoutesTemp = JSON.parse(res.data)
+      //   accessedRoutes = filterRouter(accessedRoutesTemp)
+      //   accessedRoutes = accessedRoutes.concat(manageRoutes)
+      //   console.log('accessedRoutes',accessedRoutes)
+      //   commit('SET_ROUTES', accessedRoutes)
+      //   //放到外面会因为异步的原因导致路由跳转但是无法匹配到组件跳到空白页中去
+      //   resolve(accessedRoutes)
+      // })
+
+      getRouterList().then((res)=>{
+        let data = res.data
+        let accessRoutesTemp = []
+        data.forEach((item,index)=>{
+          let firstRoutPath ={
+            path: item.module_Address,
+            component: item.module_Biaozhi,
+            redirect: item.module_Part2,
+            alwaysShow: true,
+            name: item.module_Address.replace('/',''),
+            meta:{
+              title: item.module_Name,
+              icon: "lock",
+              roles: ['admin','editor']
+            },
+            children: []
+          }
+          if(item.childModuleList != []){
+            item.childModuleList.forEach((item,index)=>{
+              let secondRoutePath = {
+                path: item.module_Address,
+                component:  '() => import(\'@/views/display/display\')',
+                name: item.module_Address,
+                meta:{
+                  title: item.module_Name,
+                  src: item.module_Part2,
+                  roles: ['admin','role']
+                }
+              };
+                firstRoutPath.children.push(secondRoutePath)
+            })
+          }
+          accessRoutesTemp.push(firstRoutPath)
+        })
+        accessedRoutes = filterRouter(accessRoutesTemp)
         commit('SET_ROUTES', accessedRoutes)
         //放到外面会因为异步的原因导致路由跳转但是无法匹配到组件跳到空白页中去
         resolve(accessedRoutes)

@@ -32,7 +32,7 @@
     name: 'Carousel',
     data() {
       return {
-        pauseFlag: false,
+        pauseFlag: false,//false表示播放，true表示暂停
         flag: false, // 用于该组件的iframe是否显示
         isFullscreen: false,
         src: '',
@@ -58,15 +58,9 @@
     },
     watch: {
       isSwipper(newValue, oldValue) {
-        console.log('old ' + oldValue)
-        console.log('new ' + newValue)
-        console.log('isSwipper watch ' + this.isSwipper)
-        console.log('进入 mounted函数')
         if (newValue) {
-          console.log('!2234242153126156116179726963945993693969')
           this.flag = true
           this.click()
-          console.log('carousel time ' + this.carouselTime)
           if (this.$route.meta.hasOwnProperty('src')) {
             this.src = this.$route.meta.src
           }
@@ -79,12 +73,9 @@
       visitedViews(newValue, oldValue) {
         // 监控到到点击了新的路由，visited列表中添加新的值，重新从visitedViews中获取srcList
         this.srcList.length = 0
-        console.log(this.visitedViews)
         this.visitedViews.forEach((value, index, arr) => {
-          console.log(value)
           if (value.meta.hasOwnProperty('src')) this.srcList.push(value.meta.src)
         })
-        console.log(this.srcList)
       }
     },
     created() {
@@ -103,7 +94,6 @@
       click() {
         // this.$nextTick(()=>{const element = document.getElementById('frame')})
         const element = document.getElementById('byc')
-        console.log('==============================================' + element)
         if (!screenfull.enabled) {
           this.$message({
             message: 'you browser can not work',
@@ -111,7 +101,6 @@
           })
           return false
         }
-        console.log('打印前' + element)
         screenfull.toggle(element)
       },
       change() {
@@ -128,13 +117,10 @@
         }
       },
       goToNewPage(index, urlList) {
-        console.log('isswipper ' + this.isSwipper)
         if (this.flag && this.pauseFlag === false) {
-          console.log('跳转URL界面')
           if (index < urlList.length) {
             setTimeout(() => {
               this.src = urlList[index]
-              console.log(this.src)
               index++
               this.goToNewPage(index, urlList)
             }, this.carouselTime)
@@ -146,7 +132,6 @@
       fullScreenEsc() {
         if (!this.checkFull()) {
           this.isFullscreen = false
-          console.log('监听到了退出了全屏事件~~~~~~~~~~~~~~~~~~')
           this.flag = false
           this.$store.dispatch('carousel/changeSwipperStatus',false)
         }
@@ -180,7 +165,6 @@
       //     this.isSwipper = false
       // }
       previousPage() {
-        console.log('前一页')
         //首先找到当前页面的src在列表的索引
         let index = this.srcList.map(item => item).indexOf(this.src)
         if (index === 0) {
@@ -190,7 +174,6 @@
         }
       },
       nextPage() {
-        console.log('后一页')
         //首先找到当前页面的src在列表的索引
         let index = this.srcList.map(item => item).indexOf(this.src)
         //如果为数组末尾
@@ -203,7 +186,7 @@
       changePauseStatus() {
         this.pauseFlag = !this.pauseFlag
         if (this.pauseFlag === false) {
-          let index = this.srcList.map(item => item).indexOf(this.src)
+          let index = this.srcList.indexOf(this.src)
           this.goToNewPage(index, this.srcList)
         }
       }
@@ -222,7 +205,7 @@
       width: 100%;
       height: 50px;
       position: absolute;
-      /*这个border不能去，估计有border就把div在z轴方向放到iframe的前面，没有就把div放在了iframe的后面*/
+      /*这个border不能去掉，估计有border就把div在z轴方向放到iframe的前面，没有就把div放在了iframe的后面*/
       border: 0.5px solid transparent;
       /*这个z-index压根就没生效*/
       z-index: 99;

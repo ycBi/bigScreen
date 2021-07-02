@@ -13,7 +13,8 @@ export const getLoginToken = (params) => post('/user/login',params)
 export const getUserInfo = () => get('/user/getUserInfo',{})
 
 //根据用户的权限获取路由
-export const getRouterList = (param) => get('/router/getList',{role:param})
+// export const getRouterList = (param) => get('/router/getList',{role:param})
+export const getRouterList = () => get('/router/getList',{})
 
 //修改路由(路由改变并且需要提交到后台)
 export const updateRouterList = (param1,param2) => post('/router/updateRoutes',{role:param1,routes:param2})
